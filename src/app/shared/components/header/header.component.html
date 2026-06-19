@@ -1,0 +1,79 @@
+<div class="header">
+  <!-- Sidebar area (empty space above logo) -->
+  <div class="header-sidebar-area"></div>
+  
+  <!-- Content area with greeting -->
+  <div class="header-content">
+    <div class="header-left">
+      <span class="greeting">{{ currentUser.greeting }}</span>
+    </div>
+
+    <div class="header-right">
+      <div class="language-selector" 
+           (click)="toggleLanguageDropdown()" 
+           (keydown.enter)="toggleLanguageDropdown()" 
+           (keydown.space)="toggleLanguageDropdown()" 
+           tabindex="0" 
+           role="button" 
+           [attr.aria-expanded]="showLanguageDropdown">
+        <span class="flag">{{ currentUser.flag }}</span>
+        <span>{{ currentUser.language }}</span>
+        <span class="dropdown-arrow">▽</span>
+        
+        <div *ngIf="showLanguageDropdown" class="dropdown-menu language-dropdown">
+          <div 
+            *ngFor="let language of availableLanguages" 
+            class="dropdown-item"
+            [class.selected]="language.code === currentUser.languageCode"
+            (click)="setLanguage(language); $event.stopPropagation()"
+            (keydown.enter)="setLanguage(language); $event.stopPropagation()"
+            (keydown.space)="setLanguage(language); $event.stopPropagation()"
+            tabindex="0"
+            role="button">
+            <span class="flag">{{ language.flag }}</span>
+            <span>{{ language.name }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-section" 
+           (click)="toggleProfileDropdown()" 
+           (keydown.enter)="toggleProfileDropdown()" 
+           (keydown.space)="toggleProfileDropdown()" 
+           tabindex="0" 
+           role="button" 
+           [attr.aria-expanded]="showProfileDropdown">
+        <span class="profile-name">{{ currentUser.name }}</span>
+        <span class="dropdown-arrow">▽</span>
+        
+        <div *ngIf="showProfileDropdown" class="dropdown-menu">
+          <div class="dropdown-item" 
+               (click)="onProfile()" 
+               (keydown.enter)="onProfile()" 
+               (keydown.space)="onProfile()" 
+               tabindex="0" 
+               role="button">{{ translate('profile') }}</div>
+          <div *ngIf="canAccessSettings()" 
+               class="dropdown-item" 
+               (click)="onSettings()" 
+               (keydown.enter)="onSettings()" 
+               (keydown.space)="onSettings()" 
+               tabindex="0" 
+               role="button">{{ translate('settings') }}</div>
+          <div class="dropdown-item logout-item" 
+               (click)="onLogout()" 
+               (keydown.enter)="onLogout()" 
+               (keydown.space)="onLogout()" 
+               tabindex="0" 
+               role="button">{{ translate('logout') }}</div>
+        </div>
+      </div>
+
+      <div class="theme-toggle">
+        <button class="theme-btn" (click)="toggleTheme()" [title]="isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+          <lucide-icon [img]="isDarkMode ? Sun : Moon" [size]="20"></lucide-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<div class="dashboard-layout">
+  <!-- Hamburger menu button for mobile -->
+  <button class="hamburger-menu" (click)="toggleSidebar()" [class.open]="sidebarOpen">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- Overlay for mobile when sidebar is open -->
+  <div class="sidebar-overlay" [class.active]="sidebarOpen" (click)="closeSidebar()"></div>
+
+  <!-- Sidebar -->
+  <app-sidebar [class.open]="sidebarOpen" (menuItemClick)="closeSidebar()"></app-sidebar>
+  
+  <!-- Header -->
+  <app-header></app-header>
+
+  <!-- Main content area for routed views -->
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
+
+  <!-- Toast notifications -->
+  <app-toast></app-toast>
+</div>

@@ -1,0 +1,246 @@
+<div class="ticket-form-container">
+  <!-- Success Message -->
+  <div class="success-message" *ngIf="showSuccess">
+    <div class="success-content">
+      <svg class="success-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+        xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+        <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" />
+      </svg>
+      <h3>Ticket Submitted Successfully!</h3>
+      <p>Your ticket has been created and you will receive a confirmation email shortly with your ticket number.</p>
+    </div>
+  </div>
+
+  <!-- Ticket Form -->
+  <div class="form-wrapper" *ngIf="!showSuccess">
+    <div class="form-header">
+      <h1>{{ config.title }}</h1>
+      <p>{{ config.description }}</p>
+    </div>
+
+    <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()" class="ticket-form">
+      <!-- Personal Information Row (Public Mode Only) -->
+      <div class="form-row" *ngIf="config.showPersonalInfo">
+        <div class="form-group">
+          <label for="firstName">First name</label>
+          <input type="text" id="firstName" formControlName="firstName" [class.error]="getFieldError('firstName')"
+            placeholder="Enter your first name">
+          <div class="error-message" *ngIf="getFieldError('firstName')">
+            {{ getFieldError('firstName') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="lastName">Last name</label>
+          <input type="text" id="lastName" formControlName="lastName" [class.error]="getFieldError('lastName')"
+            placeholder="Enter your last name">
+          <div class="error-message" *ngIf="getFieldError('lastName')">
+            {{ getFieldError('lastName') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" formControlName="email" [class.error]="getFieldError('email')"
+            placeholder="Enter your email address">
+          <div class="error-message" *ngIf="getFieldError('email')">
+            {{ getFieldError('email') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Subject and Type Row -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" formControlName="subject" [class.error]="getFieldError('subject')"
+            placeholder="Brief description of your issue">
+          <div class="error-message" *ngIf="getFieldError('subject')">
+            {{ getFieldError('subject') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="ticketType">Ticket type</label>
+          <select id="ticketType" formControlName="ticketType" [class.error]="getFieldError('ticketType')" [disabled]="isLoadingData">
+            <option value="">
+              {{ isLoadingData ? 'Loading ticket types...' : 'Select a type' }}
+            </option>
+            <option *ngFor="let type of ticketTypes" [value]="type">{{ type }}</option>
+          </select>
+          <div class="error-message" *ngIf="getFieldError('ticketType')">
+            {{ getFieldError('ticketType') }}
+          </div>
+          <div class="error-message" *ngIf="dataLoadError && !isLoadingData">
+            Failed to load ticket types. Please refresh the page.
+          </div>
+        </div>
+      </div>
+
+      <!-- Department and Priority Row -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="department">Department</label>
+          <select id="department" formControlName="department" [class.error]="getFieldError('department')" [disabled]="isLoadingData">
+            <option value="">
+              {{ isLoadingData ? 'Loading departments...' : 'Select a department' }}
+            </option>
+            <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
+          </select>
+          <div class="error-message" *ngIf="getFieldError('department')">
+            {{ getFieldError('department') }}
+          </div>
+          <div class="error-message" *ngIf="dataLoadError && !isLoadingData">
+            Failed to load departments. Please refresh the page.
+          </div>
+        </div>
+
+        <!-- Priority (Admin Mode Only) -->
+        <div class="form-group" *ngIf="config.showPriority">
+          <label for="priority">Priority</label>
+          <select id="priority" formControlName="priority">
+            <option *ngFor="let priority of priorities" [value]="priority.value">
+              {{ priority.label }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Assignment (Admin Mode Only) -->
+      <div class="form-row" *ngIf="config.showAssignment">
+        <div class="form-group full-width">
+          <label for="assignedTo">Assign To</label>
+          <select id="assignedTo" formControlName="assignedTo">
+            <option value="">Unassigned</option>
+            <!-- Add staff members here -->
+          </select>
+        </div>
+      </div>
+
+      <!-- Request Details -->
+      <div class="form-group">
+        <label for="requestDetails">Request Details</label>
+        <div class="rich-text-toolbar">
+          <button type="button" class="toolbar-btn" title="Paragraph">
+            <span>Paragraph</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+              <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+          <div class="toolbar-divider"></div>
+          <button type="button" class="toolbar-btn" title="Bold">
+            <strong>B</strong>
+          </button>
+          <button type="button" class="toolbar-btn" title="Italic">
+            <em>I</em>
+          </button>
+          <button type="button" class="toolbar-btn" title="Underline">
+            <u>U</u>
+          </button>
+          <div class="toolbar-divider"></div>
+          <button type="button" class="toolbar-btn" title="Bullet List">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <line x1="8" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="2" />
+              <line x1="8" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2" />
+              <line x1="8" y1="18" x2="21" y2="18" stroke="currentColor" stroke-width="2" />
+              <line x1="3" y1="6" x2="3.01" y2="6" stroke="currentColor" stroke-width="2" />
+              <line x1="3" y1="12" x2="3.01" y2="12" stroke="currentColor" stroke-width="2" />
+              <line x1="3" y1="18" x2="3.01" y2="18" stroke="currentColor" stroke-width="2" />
+            </svg>
+          </button>
+          <button type="button" class="toolbar-btn" title="Numbered List">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <line x1="10" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="2" />
+              <line x1="10" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2" />
+              <line x1="10" y1="18" x2="21" y2="18" stroke="currentColor" stroke-width="2" />
+              <path d="M4 6H2V4L4 4V6Z" stroke="currentColor" stroke-width="2" />
+              <path d="M4 12H2V10L4 10V12Z" stroke="currentColor" stroke-width="2" />
+              <path d="M4 18H2V16L4 16V18Z" stroke="currentColor" stroke-width="2" />
+            </svg>
+          </button>
+        </div>
+        <textarea id="requestDetails" formControlName="requestDetails" [class.error]="getFieldError('requestDetails')"
+          placeholder="Please provide detailed information about your request..." rows="6"></textarea>
+        <div class="error-message" *ngIf="getFieldError('requestDetails')">
+          {{ getFieldError('requestDetails') }}
+        </div>
+      </div>
+
+      <!-- File Attachment -->
+      <div class="form-group">
+        <div class="file-upload-area">
+          <input type="file" id="attachments" (change)="onFileSelect($event)" multiple
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.txt" class="file-input">
+          <label for="attachments" class="file-upload-label">
+            <svg class="upload-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M17 8L12 3L7 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+              <path d="M12 3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+            <span>Attach files</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Terms and Conditions (Public Mode Only) -->
+      <div class="form-group" *ngIf="config.mode === 'public'">
+        <div class="checkbox-group">
+          <input type="checkbox" id="agreeToTerms" formControlName="agreeToTerms"
+            [class.error]="getFieldError('agreeToTerms')">
+          <label for="agreeToTerms">
+            I agree with the <a href="#" class="terms-link">terms and conditions</a>
+          </label>
+        </div>
+        <div class="error-message" *ngIf="getFieldError('agreeToTerms')">
+          You must agree to the terms and conditions
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="form-actions">
+        <button type="submit" class="submit-btn" 
+                [disabled]="isSubmitting || isLoadingData || dataLoadError" 
+                [class.loading]="isSubmitting">
+          <span *ngIf="!isSubmitting && !isLoadingData">{{ config.submitButtonText }}</span>
+          <span *ngIf="isLoadingData" class="loading-text">
+            <svg class="spinner" width="20" height="20" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-dasharray="31.416" stroke-dashoffset="31.416">
+                <animate attributeName="stroke-dasharray" dur="2s" values="0 31.416;15.708 15.708;0 31.416"
+                  repeatCount="indefinite" />
+                <animate attributeName="stroke-dashoffset" dur="2s" values="0;-15.708;-31.416"
+                  repeatCount="indefinite" />
+              </circle>
+            </svg>
+            Loading form data...
+          </span>
+          <span *ngIf="isSubmitting" class="loading-text">
+            <svg class="spinner" width="20" height="20" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-dasharray="31.416" stroke-dashoffset="31.416">
+                <animate attributeName="stroke-dasharray" dur="2s" values="0 31.416;15.708 15.708;0 31.416"
+                  repeatCount="indefinite" />
+                <animate attributeName="stroke-dashoffset" dur="2s" values="0;-15.708;-31.416"
+                  repeatCount="indefinite" />
+              </circle>
+            </svg>
+            Submitting...
+          </span>
+          <span *ngIf="dataLoadError" class="error-text">Form data unavailable</span>
+        </button>
+
+        <!-- Cancel Button (Admin Mode Only) -->
+        <button type="button" class="cancel-btn" *ngIf="config.mode === 'admin'" (click)="onCancel()">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

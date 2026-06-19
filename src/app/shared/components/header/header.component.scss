@@ -1,0 +1,233 @@
+.header {
+  height: 80px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--slate-200);
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 999;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.header-sidebar-area {
+  width: 260px;
+  flex-shrink: 0;
+
+  /* Matches sidebar width */
+  @media (max-width: 1024px) {
+    display: none;
+  }
+}
+
+.header-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .greeting {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--slate-800);
+    letter-spacing: -0.01em;
+  }
+
+  .date-time {
+    font-size: 0.85rem;
+    color: var(--slate-500);
+    font-weight: 500;
+  }
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Common Dropdown Trigger Styles */
+.language-selector,
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+
+  &:hover {
+    background: var(--slate-50);
+    border-color: var(--slate-200);
+  }
+}
+
+.profile-section {
+  padding-right: 0.25rem;
+
+  &:hover {
+    background: var(--slate-50);
+  }
+}
+
+.profile-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--slate-700);
+}
+
+.dropdown-arrow {
+  font-size: 0.7rem;
+  color: var(--slate-400);
+  transition: transform 0.2s ease;
+
+  [aria-expanded="true"] & {
+    transform: rotate(180deg);
+  }
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background: white;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  min-width: 200px;
+  z-index: 1000;
+  padding: 0.5rem;
+  transform-origin: top right;
+  animation: scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &.language-dropdown {
+    min-width: 180px;
+
+    .dropdown-item {
+      padding: 0.75rem 1rem;
+    }
+  }
+
+  &.profile-dropdown {
+    width: 240px;
+  }
+}
+
+.dropdown-item {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: var(--radius-lg);
+  color: var(--slate-700);
+
+  &:hover {
+    background: var(--primary-50);
+    color: var(--primary-700);
+  }
+
+  &.selected {
+    background: var(--primary-50);
+    color: var(--primary-700);
+    font-weight: 600;
+  }
+
+  &.logout-item {
+    color: var(--danger);
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--slate-100);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+
+    &:hover {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+  }
+}
+
+/* Theme Toggle */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-btn {
+  background: var(--slate-100);
+  border: none;
+  cursor: pointer;
+  padding: 0.625rem;
+  border-radius: var(--radius-full);
+  transition: all 0.2s ease;
+  color: var(--slate-600);
+  border-radius: 50%;
+  /* Circle */
+
+  &:hover {
+    background: var(--primary-100);
+    color: var(--primary-600);
+    transform: rotate(15deg);
+  }
+}
+
+.flag {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .header-sidebar-area {
+    display: none;
+  }
+
+  .header-content {
+    padding-left: 4rem;
+    /* Space for hamburger */
+  }
+}
+
+@media (max-width: 768px) {
+  .header-left .greeting {
+    font-size: 1rem;
+  }
+
+  .profile-name {
+    display: none;
+  }
+
+  .header-right {
+    gap: 0.75rem;
+  }
+}

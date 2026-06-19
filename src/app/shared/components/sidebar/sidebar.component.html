@@ -1,0 +1,42 @@
+<div class="sidebar">
+  <!-- Logo Section -->
+  <div class="sidebar-logo">
+    <img src="logo.png" alt="Suntra Logo" class="logo">
+  </div>
+
+  <div class="sidebar-content">
+    <ul class="menu-list">
+      <li *ngFor="let item of menuItems" class="menu-item">
+        <a [routerLink]="item.expandable && item.label === 'Settings' ? null : item.route" class="menu-link"
+          [class.active]="item.label === 'Settings' && expandedSettings" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+          (click)="item.expandable && item.label === 'Settings' ? handleSettingsClick($event) : onMenuItemClick()">
+          <span class="menu-icon">
+            <lucide-icon [img]="getIconComponent(item.icon)" [size]="18">
+            </lucide-icon>
+          </span>
+          <span class="menu-label">{{ item.label }}</span>
+          <span *ngIf="item.expandable" class="expand-icon">
+            <lucide-icon [img]="item.label === 'Settings' && expandedSettings ? ChevronDown : ChevronRight" [size]="14">
+            </lucide-icon>
+          </span>
+        </a>
+
+        <ul *ngIf="item.label === 'Settings' && expandedSettings" class="submenu">
+          <li *ngFor="let subItem of settingsSubItems" class="submenu-item">
+            <a [routerLink]="subItem.route" class="submenu-link" routerLinkActive="active" (click)="onMenuItemClick()">
+              {{ subItem.label }}
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="footer-provider">
+      <span class="provider-powered">Powered by</span>
+      <span class="provider-name">Optimum ERP Systems</span>
+    </div>
+  </div>
+</div>
