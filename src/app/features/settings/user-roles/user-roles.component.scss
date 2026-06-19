@@ -1,0 +1,73 @@
+// Use shared styles
+@use '../shared-styles/settings-page.scss';
+
+.user-roles-page {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// Tab navigation styles
+.tab-navigation {
+  display: flex;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tab-btn {
+  padding: 1rem 2rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: #374151;
+  }
+
+  &.active {
+    color: #3b82f6;
+    border-bottom-color: #3b82f6;
+  }
+}
+
+// Override some shared styles for better consistency
+.page-header {
+  margin-bottom: 1.5rem;
+}
+
+// Additional action button styles
+.actions-cell {
+  .delete-btn {
+    &:hover {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .user-roles-page {
+    padding: 1rem;
+  }
+
+  .tab-navigation {
+    flex-direction: column;
+  }
+
+  .tab-btn {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+    border-right: none;
+
+    &.active {
+      border-bottom-color: #3b82f6;
+      background: #f0f9ff;
+    }
+  }
+}

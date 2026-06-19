@@ -1,0 +1,224 @@
+<div class="page-container">
+  <!-- Hidden file input for import -->
+  <input #importFileInput type="file" accept=".csv,.xlsx,.xls" (change)="onImportFileSelected($event)"
+    style="display: none;">
+
+  <div class="page-header">
+    <div class="header-title">
+      <h1>Relationship Management</h1>
+      <p class="subtitle">Operational gateway for institutional support and brokerage inquiries</p>
+    </div>
+    <div class="breadcrumb">
+      <lucide-icon [img]="Home" [size]="16"></lucide-icon>
+      <span class="separator">/</span>
+      <span class="current">Tickets</span>
+    </div>
+  </div>
+
+  <div class="card tickets-card">
+    <div class="card-header-actions">
+      <!-- Search and Filters Toolbar -->
+      <div class="toolbar">
+        <div class="search-wrapper">
+          <lucide-icon [img]="Search" [size]="18" class="search-icon"></lucide-icon>
+          <input type="text" placeholder="Search reference, subject or client..." [(ngModel)]="searchTerm"
+            (input)="applyFilters()" class="form-control search-input">
+        </div>
+
+        <div class="toolbar-actions">
+          <button class="btn btn-secondary" (click)="resetFilters()" title="Refresh Data">
+            <lucide-icon [img]="RefreshCw" [size]="16"></lucide-icon>
+          </button>
+
+          <div class="dropdown-wrapper">
+            <button class="btn btn-secondary" (click)="exportTickets()">
+              <lucide-icon [img]="Download" [size]="16"></lucide-icon> Export CSV
+            </button>
+          </div>
+
+          <button class="btn btn-secondary" (click)="importTickets()">
+            <lucide-icon [img]="Upload" [size]="16"></lucide-icon> Import Data
+          </button>
+
+          <button class="btn btn-primary" (click)="navigateToCreateTicket()">
+            <lucide-icon [img]="Plus" [size]="18"></lucide-icon> Initiate Ticket
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters Row -->
+      <div class="filters-row">
+        <div class="filter-group">
+          <label>Type</label>
+          <select [(ngModel)]="selectedType" (change)="applyFilters()" class="form-select">
+            <option value="">All Types</option>
+            <option value="">All Types</option>
+            @for (type of ticketTypes; track type.name) {
+            <option [value]="type.name">{{ type.name }}</option>
+            }
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Department</label>
+          <select [(ngModel)]="selectedDepartment" (change)="applyFilters()" class="form-select">
+            <option value="">All Departments</option>
+            <option value="">All Departments</option>
+            @for (dept of departments; track dept.name) {
+            <option [value]="dept.name">{{ dept.name }}</option>
+            }
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Priority</label>
+          <select [(ngModel)]="selectedPriority" (change)="applyFilters()" class="form-select">
+            <option value="">All Priorities</option>
+            <option value="">All Priorities</option>
+            @for (priority of priorities; track priority.value) {
+            <option [value]="priority.value">{{ priority.label }}</option>
+            }
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Status</label>
+          <select [(ngModel)]="selectedStatus" (change)="applyFilters()" class="form-select">
+            <option value="">All Statuses</option>
+            <option value="">All Statuses</option>
+            @for (status of statuses; track status.value) {
+            <option [value]="status.value">{{ status.label }}</option>
+            }
+          </select>
+        </div>
+        <div class="filter-group wide">
+          <label>Assignee</label>
+          <select [(ngModel)]="selectedAssignee" (change)="applyFilters()" class="form-select">
+            <option value="">All Assignees</option>
+            <option value="">All Assignees</option>
+            @for (staff of staffMembers; track staff.id) {
+            <option [value]="staff.id">
+              {{ staff.firstName }} {{ staff.lastName }}
+            </option>
+            }
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    @if (loading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading tickets...</p>
+    </div>
+    }
+
+    <!-- Tickets Table -->
+    @if (!loading) {
+    <div class="table-responsive">
+      <table class="tickets-table">
+        <thead>
+          <tr>
+            <th class="w-20">Key</th>
+            <th class="w-40">Subject</th>
+            <th class="w-10">Priority</th>
+            <th class="w-10">Status</th>
+            <th class="w-10">SLA</th>
+            <th class="w-10 text-right">Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Empty State Inside Table Structure -->
+          @if (filteredTickets.length === 0) {
+          <tr class="empty-row">
+            <td colspan="6">
+              <div class="empty-state">
+                <div class="empty-icon"><lucide-icon [img]="TicketIcon" [size]="48"></lucide-icon></div>
+                <h3>No tickets found</h3>
+                <p>Try adjusting your search or filters.</p>
+              </div>
+            </td>
+          </tr>
+          }
+
+          @for (ticket of filteredTickets; track ticket.id) {
+          <tr class="ticket-row" (click)="viewTicket(ticket)">
+            <td class="ticket-key font-mono">{{ ticket.key }}</td>
+            <td>
+              <div class="subject-cell">
+                <div class="subject-text">{{ ticket.subject }}</div>
+                <div class="subject-meta">
+                  <span>{{ ticket.customerName }}</span>
+                  @if (ticket.assignedToName) {
+                  <span class="assignee-meta">
+                    <lucide-icon [img]="User" [size]="12"></lucide-icon> {{ ticket.assignedToName }}
+                  </span>
+                  }
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="badge" [ngClass]="'badge-priority-' + (ticket.priority | lowercase)">
+                {{ ticket.priority }}
+              </span>
+            </td>
+            <td>
+              <span class="badge" [ngClass]="'badge-status-' + (ticket.status | lowercase)">
+                {{ ticket.status }}
+              </span>
+            </td>
+            <td>
+              <span class="badge badge-sla" [ngClass]="getSLABadgeClass(ticket)">
+                @if (getSLABadgeClass(ticket) === 'sla-on-time') {
+                <lucide-icon [img]="Check" [size]="12"></lucide-icon>
+                } @else if (getSLABadgeClass(ticket) === 'sla-breached') {
+                <lucide-icon [img]="AlertCircle" [size]="12"></lucide-icon>
+                }
+                {{ getSLABadgeText(ticket) }}
+              </span>
+            </td>
+            <td class="text-right text-muted text-sm">
+              {{ ticket.updatedAt | timeAgo }}
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    @if (totalPages > 1 || totalCount > 0) {
+    <div class="card-footer">
+      <div class="pagination-info">
+        Showing <strong>{{ (currentPage - 1) * pageSize + 1 }}-{{ Math.min(currentPage * pageSize, totalCount)
+          }}</strong> of <strong>{{ totalCount }}</strong>
+      </div>
+
+      <div class="pagination-controls">
+        <button class="btn btn-sm btn-ghost" [disabled]="currentPage === 1" (click)="onPageChange(currentPage - 1)">
+          Previous
+        </button>
+        <div class="page-numbers">
+          @for (page of getPageNumbers(); track page) {
+          <button class="btn btn-sm btn-icon" [class.btn-primary]="page === currentPage"
+            [class.btn-ghost]="page !== currentPage" (click)="onPageChange(page)">
+            {{ page }}
+          </button>
+          }
+        </div>
+        <button class="btn btn-sm btn-ghost" [disabled]="currentPage === totalPages"
+          (click)="onPageChange(currentPage + 1)">
+          Next
+        </button>
+      </div>
+
+      <div class="page-size-selector">
+        <select [(ngModel)]="pageSize" (change)="onPageSizeChange()" class="form-select form-select-sm">
+          <option [value]="10">10 / page</option>
+          <option [value]="25">25 / page</option>
+          <option [value]="50">50 / page</option>
+        </select>
+      </div>
+    </div>
+    }
+    }
+  </div>
+</div>

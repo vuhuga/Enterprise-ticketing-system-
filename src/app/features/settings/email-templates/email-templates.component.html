@@ -1,0 +1,73 @@
+<div class="email-templates-container" *ngIf="!isEditing">
+  <div class="page-header">
+    <h2>Email Templates</h2>
+    <p>Manage email templates used throughout the system</p>
+  </div>
+
+  <div class="templates-table">
+    <div class="table-header">
+      <div class="col-name">Name</div>
+      <div class="col-slug">Slug</div>
+      <div class="col-details">Details</div>
+      <div class="col-actions"></div>
+    </div>
+    
+    @for (template of emailTemplates; track template.id) {
+      <div class="table-row" (click)="editTemplate(template)">
+        <div class="col-name">{{ template.name }}</div>
+        <div class="col-slug">{{ template.slug }}</div>
+        <div class="col-details">{{ template.description }}</div>
+        <div class="col-actions">
+          <span class="arrow-icon">></span>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- Full Screen Template Viewer -->
+<div class="template-viewer" *ngIf="isEditing">
+  <div class="viewer-header">
+    <button class="back-btn" (click)="closeEditor()">
+      <span class="arrow">←</span>
+    </button>
+    <div class="header-content">
+      <h2>{{ selectedTemplate?.name }}</h2>
+      <p>{{ selectedTemplate?.description }}</p>
+    </div>
+  </div>
+  
+  <div class="viewer-content">
+    <div class="content-grid">
+      <!-- Template Preview -->
+      <div class="preview-section">
+        <div class="template-info">
+          <div class="info-item">
+            <div class="info-label">Name</div>
+            <div class="info-value">{{ selectedTemplate?.name }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Details</div>
+            <div class="info-value">{{ selectedTemplate?.description }}</div>
+          </div>
+        </div>
+        <div class="preview-header">
+          <h3>Email HTML</h3>
+        </div>
+        <div class="email-preview-container">
+          <div 
+            #emailPreview
+            class="email-preview" 
+            contenteditable="true"
+            (input)="onContentChange($event)">
+          </div>
+        </div>
+        <div class="preview-actions">
+          <button class="update-btn" (click)="updateTemplate()">
+            Update Template
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

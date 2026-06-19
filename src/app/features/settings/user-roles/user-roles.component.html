@@ -1,0 +1,133 @@
+<div class="user-roles-page">
+  <div class="page-header">
+    <h1>User Roles</h1>
+    <div class="breadcrumb">
+      <span>Home</span>
+      <span>/</span>
+      <span>Settings</span>
+      <span>/</span>
+      <span>User Roles</span>
+    </div>
+  </div>
+
+  <!-- Tab Navigation -->
+  <div class="tab-navigation">
+    <button 
+      class="tab-btn active"
+    >
+      Manage Roles
+    </button>
+  </div>
+
+  <!-- Roles Management Tab -->
+  <div class="content-container">
+    <div class="search-section">
+      <div class="search-left">
+        <input 
+          type="text" 
+          placeholder="Search roles..." 
+          [(ngModel)]="searchTerm"
+          (input)="applySearch()"
+          class="search-input"
+        >
+        <button class="reset-btn" (click)="resetSearch()">Reset</button>
+      </div>
+      
+      <div class="search-right">
+        <button class="new-btn" (click)="createNewRole()">Create a New Role</button>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <div *ngIf="isLoading" class="loading-state">
+        <p>Loading roles...</p>
+      </div>
+      
+      <table class="data-table" *ngIf="!isLoading">
+        <thead>
+          <tr>
+            <th>#ID</th>
+            <th>Name</th>
+            <th>Slug</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let role of filteredRoles" class="data-row" (click)="editRole(role)">
+            <td class="id-cell">{{ role.id }}</td>
+            <td class="name-cell">{{ role.name }}</td>
+            <td class="description-cell">{{ role.slug }}</td>
+            <td class="actions-cell">
+              <span class="arrow-icon">></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Create/Edit Role Modal -->
+  <div class="modal-overlay" *ngIf="showRoleModal" 
+       (click)="closeRoleModal()" 
+       (keydown.escape)="closeRoleModal()" 
+       tabindex="0">
+    <div class="modal-content" 
+         (click)="$event.stopPropagation()" 
+         (keydown)="$event.stopPropagation()" 
+         tabindex="-1">
+      <div class="modal-header">
+        <h3>{{ isEditMode ? 'Edit Role' : 'Create New Role' }}</h3>
+        <button class="close-btn" (click)="closeRoleModal()">×</button>
+      </div>
+      
+      <form [formGroup]="roleForm" (ngSubmit)="onRoleSubmit()" class="modal-form">
+        <div class="form-group">
+          <label for="name">Role Name *</label>
+          <input 
+            type="text" 
+            id="name" 
+            formControlName="name" 
+            placeholder="Enter role name"
+            class="form-input"
+          >
+          <div class="error-message" *ngIf="roleForm.get('name')?.errors?.['required'] && roleForm.get('name')?.touched">
+            Role name is required
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="slug">Slug *</label>
+          <input 
+            type="text" 
+            id="slug" 
+            formControlName="slug" 
+            placeholder="Enter slug (e.g., admin, customer)"
+            class="form-input"
+          >
+          <div class="error-message" *ngIf="roleForm.get('slug')?.errors?.['required'] && roleForm.get('slug')?.touched">
+            Slug is required
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button 
+            *ngIf="isEditMode && currentRole" 
+            type="button" 
+            class="delete-btn" 
+            (click)="deleteRole(currentRole)"
+          >
+            Delete
+          </button>
+          <button 
+            type="submit" 
+            class="submit-btn" 
+            [disabled]="roleForm.invalid || isSubmitting"
+            (click)="onRoleSubmit()"
+          >
+            {{ isSubmitting ? 'Saving...' : (isEditMode ? 'Update' : 'Create') }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
