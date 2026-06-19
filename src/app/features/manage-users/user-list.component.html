@@ -1,0 +1,138 @@
+<div class="page-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <h1>Users</h1>
+      <p>Manage and view all users in the system</p>
+    </div>
+    <div class="header-right">
+      <button class="btn btn-primary" (click)="onCreateUser()">
+        <lucide-icon [img]="Plus" [size]="18"></lucide-icon>
+        Add User
+      </button>
+    </div>
+  </div>
+
+  <!-- Search and Filters -->
+  <div class="filters-section">
+    <div class="search-box">
+      <input type="text" placeholder="Search users by name, email, or role..." [(ngModel)]="searchTerm"
+        (keyup.enter)="onSearch()" class="search-input">
+      <button class="search-btn" (click)="onSearch()">
+        <lucide-icon [img]="Search" [size]="18"></lucide-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading) {
+  <div class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading users...</p>
+  </div>
+  }
+
+  <!-- User Table -->
+  @if (!loading) {
+  <div class="table-container">
+    <div class="table-wrapper">
+      <table class="users-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Department</th>
+            <th>Phone</th>
+            <th>Location</th>
+            <th>Created</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of users; track user.id) {
+          <tr class="user-row" (click)="onEdit(user)">
+            <td class="user-name">
+              <div class="name-cell">
+                <div class="avatar">{{ user.firstName.charAt(0) }}{{ user.lastName.charAt(0) }}</div>
+                <div class="name-info">
+                  <span class="full-name">{{ user.firstName }} {{ user.lastName }}</span>
+                </div>
+              </div>
+            </td>
+            <td class="email">{{ user.email }}</td>
+            <td class="role">
+              <span class="role-badge" [ngClass]="getRoleClass(user.role)">
+                {{ user.role | titlecase }}
+              </span>
+            </td>
+            <td class="department">
+              @if (user.departmentName) {
+              <span class="department-name">{{ user.departmentName }}</span>
+              } @else {
+              <span class="no-department">-</span>
+              }
+            </td>
+            <td class="phone">{{ user.phone || '-' }}</td>
+            <td class="location">
+              @if (user.city || user.country) {
+              <div class="location-info">
+                <span>{{ user.city }}{{ user.city && user.country ? ', ' : '' }}{{ user.country }}</span>
+              </div>
+              } @else {
+              <span>-</span>
+              }
+            </td>
+            <td class="created">{{ user.createdAt | date:'MMM d, y' }}</td>
+            <td class="actions">
+              <span class="arrow-icon">→</span>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty State -->
+    @if (users.length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">
+        <lucide-icon [img]="Users" [size]="64" strokeWidth="1.5"></lucide-icon>
+      </div>
+      <h3>No users found</h3>
+      <p>{{ searchTerm ? 'No users match your search criteria.' : 'Start by adding your first user to the system.' }}
+      </p>
+      <button class="btn btn-primary" (click)="onCreateUser()">
+        <lucide-icon [img]="Plus" [size]="18"></lucide-icon>
+        Add First User
+      </button>
+    </div>
+    }
+  </div>
+  }
+
+  <!-- Pagination -->
+  @if (!loading && users.length > 0) {
+  <div class="pagination-container">
+    <div class="pagination-info">
+      Showing <strong>{{ (currentPage - 1) * pageSize + 1 }}</strong> to <strong>{{ Math.min(currentPage * pageSize,
+        totalCount) }}</strong> of <strong>{{ totalCount }}</strong> users
+    </div>
+    <div class="pagination">
+      <button class="page-btn" [disabled]="currentPage === 1" (click)="onPageChange(currentPage - 1)">
+        Previous
+      </button>
+
+      @for (page of [].constructor(totalPages); track $index; let i = $index) {
+      <button class="page-btn" [class.active]="currentPage === i + 1" (click)="onPageChange(i + 1)">
+        {{ i + 1 }}
+      </button>
+      }
+
+      <button class="page-btn" [disabled]="currentPage === totalPages" (click)="onPageChange(currentPage + 1)">
+        Next
+      </button>
+    </div>
+  </div>
+  }
+</div>

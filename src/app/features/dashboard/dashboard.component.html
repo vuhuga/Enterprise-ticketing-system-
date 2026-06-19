@@ -1,0 +1,282 @@
+<div class="dashboard-container">
+  <!-- Clean Header -->
+  <div class="dashboard-header">
+    <div class="header-title">
+      <h1>{{ 'dashboard' | translate }}</h1>
+      <p class="subtitle">Overview of your support performance</p>
+    </div>
+
+    <div class="breadcrumb">
+      <lucide-icon [img]="Home" [size]="16"></lucide-icon>
+      <span class="separator">/</span>
+      <span class="current">{{ 'dashboard' | translate }}</span>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="spinner"></div>
+    <p>{{ 'loading_dashboard' | translate }}</p>
+  </div>
+
+  <div *ngIf="!loading" class="dashboard-content fade-in">
+    <!-- Top Metrics Row -->
+    <div class="metrics-grid">
+      <div *ngFor="let metric of metrics; let i = index" class="metric-card">
+        <div class="metric-header">
+          <div class="metric-icon" [ngClass]="'color-' + i">
+            <lucide-icon [img]="Users" [size]="20" *ngIf="i===0"></lucide-icon>
+            <lucide-icon [img]="CheckCircle" [size]="20" *ngIf="i===1"></lucide-icon>
+            <lucide-icon [img]="Clock" [size]="20" *ngIf="i===2"></lucide-icon>
+            <lucide-icon [img]="AlertTriangle" [size]="20" *ngIf="i===3"></lucide-icon>
+          </div>
+          <h3>{{ metric.title | translate }}</h3>
+        </div>
+
+        <div class="metric-value">{{ metric.value }}</div>
+        <p class="metric-subtitle">vs last period</p>
+
+        <div class="metric-footer">
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="parsePercentage(metric.percentage)" [ngClass]="'color-' + i">
+            </div>
+          </div>
+          <span class="percentage">{{ metric.percentage }}%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="main-grid">
+
+      <!-- Charts Column (Left) -->
+      <div class="charts-column" *ngIf="!isCustomerUser()">
+
+        <!-- Tickets by Dept & Type Row -->
+        <div class="charts-row">
+          <!-- Department Chart -->
+          <div class="card chart-card">
+            <div class="card-header">
+              <h3>Tickets by Department</h3>
+            </div>
+            <div class="card-body">
+              <div class="pie-chart-wrapper" *ngIf="departmentData.length > 0; else noData">
+                <div class="pie-chart">
+                  <svg width="160" height="160" viewBox="0 0 140 140">
+                    <circle *ngFor="let dept of departmentData; let i = index" cx="70" cy="70" r="50" fill="none"
+                      [attr.stroke]="dept.color" stroke-width="20"
+                      [attr.stroke-dasharray]="calculatePieStrokeDashArray(dept.percentage)"
+                      [attr.stroke-dashoffset]="calculateStrokeDashOffset(getCumulativePercentage(departmentData, i))"
+                      transform="rotate(-90 70 70)" />
+                  </svg>
+                  <div class="center-text">
+                    <span class="total-label">Total</span>
+                    <span class="total-value">{{ getTotalTickets(departmentData) }}</span>
+                  </div>
+                </div>
+                <div class="chart-legend">
+                  <div *ngFor="let dept of departmentData" class="legend-item">
+                    <span class="dot" [style.background-color]="dept.color"></span>
+                    <span class="label">{{ dept.name }}</span>
+                    <span class="value">{{ dept.percentage }}%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Type Chart -->
+          <div class="card chart-card">
+            <div class="card-header">
+              <h3>Tickets by Type</h3>
+            </div>
+            <div class="card-body">
+              <div class="pie-chart-wrapper" *ngIf="ticketTypeData.length > 0; else noData">
+                <div class="pie-chart">
+                  <svg width="160" height="160" viewBox="0 0 140 140">
+                    <circle *ngFor="let type of ticketTypeData; let i = index" cx="70" cy="70" r="50" fill="none"
+                      [attr.stroke]="type.color" stroke-width="20"
+                      [attr.stroke-dasharray]="calculatePieStrokeDashArray(type.percentage)"
+                      [attr.stroke-dashoffset]="calculateStrokeDashOffset(getCumulativePercentage(ticketTypeData, i))"
+                      transform="rotate(-90 70 70)" />
+                  </svg>
+                  <div class="center-text">
+                    <span class="total-label">Total</span>
+                    <span class="total-value">{{ getTotalTickets(ticketTypeData) }}</span>
+                  </div>
+                </div>
+                <div class="chart-legend">
+                  <div *ngFor="let type of ticketTypeData" class="legend-item">
+                    <span class="dot" [style.background-color]="type.color"></span>
+                    <span class="label">{{ type.name }}</span>
+                    <span class="value">{{ type.percentage }}%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ticket History Chart -->
+        <div class="card chart-card">
+          <div class="card-header">
+            <h3>Ticket History (Last 6 Months)</h3>
+          </div>
+          <div class="card-body">
+            <div class="bar-chart" *ngIf="ticketHistoryData.months.length > 0; else noData">
+              <div class="bar-chart-container">
+                <div *ngFor="let month of ticketHistoryData.months" class="bar-item">
+                  <div class="bar-wrapper">
+                    <div class="bar" [style.height.%]="(month.count / ticketHistoryData.maxCount) * 100"
+                      [class.current-month]="month.isCurrentMonth">
+                      <span class="bar-value">{{ month.count }}</span>
+                    </div>
+                  </div>
+                  <span class="bar-label">{{ month.label }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Ticket Creators -->
+        <div class="card chart-card">
+          <div class="card-header">
+            <h3>Top Ticket Creators</h3>
+          </div>
+          <div class="card-body">
+            <div class="horizontal-bar-chart" *ngIf="topCreators.length > 0; else noData">
+              <div *ngFor="let creator of topCreators" class="h-bar-item">
+                <div class="h-bar-label">{{ creator.name }}</div>
+                <div class="h-bar-wrapper">
+                  <div class="h-bar" [style.width.%]="creator.percentage" [style.background-color]="creator.color">
+                  </div>
+                  <span class="h-bar-value">{{ creator.count }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Sidebar -->
+      <div class="sidebar-column">
+
+        <!-- Quick Stats -->
+        <div class="card stats-card">
+          <div class="card-header">
+            <h3>Quick Stats</h3>
+          </div>
+          <div class="card-body">
+            <div class="stat-item">
+              <lucide-icon [img]="Users" [size]="20" class="stat-icon"></lucide-icon>
+              <div class="stat-info">
+                <span class="stat-label">Customers</span>
+                <span class="stat-value">{{ customers }}</span>
+              </div>
+            </div>
+            <div class="stat-item">
+              <lucide-icon [img]="Phone" [size]="20" class="stat-icon"></lucide-icon>
+              <div class="stat-info">
+                <span class="stat-label">Contacts</span>
+                <span class="stat-value">{{ contacts }}</span>
+              </div>
+            </div>
+            <div class="stat-item">
+              <lucide-icon [img]="Building" [size]="20" class="stat-icon"></lucide-icon>
+              <div class="stat-info">
+                <span class="stat-label">Departments</span>
+                <span class="stat-value">{{ departments }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLA Health Card -->
+        <div class="card sla-card" *ngIf="slaMetrics && !isCustomerUser()">
+          <div class="card-header">
+            <h3>SLA Health</h3>
+          </div>
+          <div class="card-body">
+            <div class="sla-overview">
+              <div class="sla-ring">
+                <svg width="120" height="120" viewBox="0 0 120 120">
+                  <circle cx="60" cy="60" r="50" fill="none" stroke="var(--slate-100)" stroke-width="12" />
+                  <circle cx="60" cy="60" r="50" fill="none" [attr.stroke]="getSLAColor()" stroke-width="12"
+                    [attr.stroke-dasharray]="calculateSLAStrokeDashArray(slaMetrics.overall.compliance_percentage)"
+                    stroke-dashoffset="0" transform="rotate(-90 60 60)" class="sla-progress" />
+                </svg>
+                <div class="sla-center">
+                  <div class="sla-percentage">{{ slaMetrics.overall.compliance_percentage }}%</div>
+                  <div class="sla-label">Compliant</div>
+                </div>
+              </div>
+
+              <div class="sla-details">
+                <div class="sla-detail-item">
+                  <lucide-icon [img]="AlertTriangle" [size]="16" class="sla-icon warning"></lucide-icon>
+                  <span class="sla-detail-label">Assignment Breaches</span>
+                  <span class="sla-detail-value">{{ slaMetrics.overall.assignment_breaches }}</span>
+                </div>
+                <div class="sla-detail-item">
+                  <lucide-icon [img]="AlertCircle" [size]="16" class="sla-icon danger"></lucide-icon>
+                  <span class="sla-detail-label">Resolution Breaches</span>
+                  <span class="sla-detail-value">{{ slaMetrics.overall.resolution_breaches }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Breaches -->
+            <div class="recent-breaches" *ngIf="slaMetrics.recentBreaches.length > 0">
+              <h4>Recent Breaches</h4>
+              <div class="breach-list">
+                <div *ngFor="let breach of slaMetrics.recentBreaches" class="breach-item">
+                  <div class="breach-key">#{{ breach.id }}</div>
+                  <div class="breach-type" [class.assignment]="breach.assignment_sla_breached"
+                    [class.resolution]="breach.resolution_sla_breached">
+                    {{ breach.assignment_sla_breached ? 'assignment' : 'resolution' }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Staff Performance (Admin Only) -->
+        <div class="card performance-card" *ngIf="staffPerformance.length > 0 && !isCustomerUser()">
+          <div class="card-header">
+            <h3>Staff Performance</h3>
+          </div>
+          <div class="card-body">
+            <div class="performance-list">
+              <div *ngFor="let staff of staffPerformance" class="performance-item">
+                <div class="staff-info">
+                  <div class="staff-avatar">{{ staff.staff_name.charAt(0) }}</div>
+                  <div class="staff-details">
+                    <div class="staff-name">{{ staff.staff_name }}</div>
+                    <div class="staff-stats">{{ staff.total_assigned }} tickets</div>
+                  </div>
+                </div>
+                <div class="staff-compliance" [class.high]="(staff.compliance_percentage || 0) >= 90"
+                  [class.medium]="(staff.compliance_percentage || 0) >= 70 && (staff.compliance_percentage || 0) < 90"
+                  [class.low]="(staff.compliance_percentage || 0) < 70">
+                  {{ staff.compliance_percentage || 0 }}%
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- No Data Template -->
+  <ng-template #noData>
+    <div class="no-data">
+      <p>No data available</p>
+    </div>
+  </ng-template>
+</div>

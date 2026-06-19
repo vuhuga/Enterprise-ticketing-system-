@@ -1,0 +1,614 @@
+:host {
+  display: block;
+  background: white;
+  font-family: var(--font-body);
+  color: var(--slate-800);
+}
+
+/* Hero Section */
+.hero {
+  background: #ffffff;
+  color: var(--slate-900);
+  padding: 100px 20px 80px 20px;
+  position: relative;
+  overflow: hidden;
+
+  .hero-content {
+    text-align: center;
+    position: relative;
+    z-index: 10;
+
+    .hero-badge {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      background: var(--primary-50);
+      color: var(--primary-700);
+      border-radius: 100px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      border: 1px solid var(--primary-100);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    h1 {
+      font-size: 4.5rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 1.5rem;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+      color: var(--slate-900);
+      letter-spacing: -0.03em;
+    }
+
+    p {
+      font-size: 1.35rem;
+      max-width: 750px;
+      margin: 0 auto 3.5rem auto;
+      color: var(--slate-500);
+      line-height: 1.6;
+    }
+  }
+
+  .hero-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 5rem;
+
+    .btn-primary-large {
+      background: var(--primary-600);
+      color: white;
+      border: none;
+      padding: 1.25rem 3rem;
+      font-size: 1.125rem;
+      font-weight: 600;
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(79, 70, 229, 0.2);
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: var(--primary-700);
+        transform: translateY(-2px);
+        box-shadow: 0 15px 30px rgba(79, 70, 229, 0.3);
+      }
+    }
+
+    .btn-outline-large {
+      background: transparent;
+      color: var(--slate-700);
+      border: 1px solid var(--slate-200);
+      padding: 1.25rem 3rem;
+      font-size: 1.125rem;
+      font-weight: 600;
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: var(--slate-50);
+        border-color: var(--slate-300);
+        transform: translateY(-2px);
+      }
+    }
+  }
+
+  .hero-logos-wrapper {
+    margin-top: 2rem;
+    opacity: 0.8;
+
+    .hero-logos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        height: 80px;
+        filter: none;
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+    }
+  }
+
+  /* Decorative Background (No Gradient, just radial light) */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: radial-gradient(circle at 50% -20%, var(--primary-50) 0%, transparent 70%);
+    pointer-events: none;
+  }
+}
+
+/* How It Works Section */
+.how-it-works {
+  padding: 140px 20px;
+  text-align: center;
+  background: var(--slate-50);
+  border-top: 1px solid var(--slate-100);
+  border-bottom: 1px solid var(--slate-100);
+
+  .label {
+    color: var(--primary-600);
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+
+  h2 {
+    color: var(--slate-900);
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  >p {
+    font-size: 1.35rem;
+    color: var(--slate-500);
+    margin: 0 auto 5rem auto;
+    max-width: 650px;
+    line-height: 1.5;
+  }
+}
+
+.steps {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 0 20px;
+
+  >div {
+    background: #fff;
+    border-radius: var(--radius-xl);
+    padding: 4rem 3rem;
+    flex: 1;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+    border: 1px solid var(--slate-100);
+    position: relative;
+
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.06);
+      border-color: var(--primary-200);
+
+      .step-icon {
+        background: var(--primary-600);
+        color: white;
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  h3 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0 0 1.25rem 0;
+    color: var(--slate-900);
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    font-size: 1.125rem;
+    color: var(--slate-500);
+    line-height: 1.7;
+    margin: 0;
+  }
+}
+
+.step-icon {
+  width: 72px;
+  height: 72px;
+  background: var(--primary-50);
+  color: var(--primary-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2.5rem auto;
+  border-radius: var(--radius-xl);
+  transition: all 0.4s ease;
+}
+
+/* Ticket Submission Form Section */
+.ticket-form-section {
+  background: white;
+  padding: 120px 20px;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: var(--radius-2xl);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+  padding: 60px;
+  border: 1px solid var(--slate-100);
+}
+
+.form-header {
+  margin-bottom: 4rem;
+  text-align: center;
+
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--slate-900);
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    color: var(--slate-500);
+    font-size: 1.125rem;
+  }
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+
+  &.full-width {
+    grid-column: 1 / -1;
+  }
+
+  label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--slate-700);
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  select,
+  textarea {
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius-lg);
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    background: var(--slate-50);
+
+    &:focus {
+      background: white;
+      border-color: var(--primary-500);
+      box-shadow: 0 0 0 4px var(--primary-50);
+      outline: none;
+    }
+
+    &.error {
+      border-color: var(--danger);
+      background-color: var(--danger-bg);
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 200px;
+    border: 1px solid var(--slate-200);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    border-top: none;
+    padding: 1.25rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    background: white;
+    transition: all 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: var(--primary-500);
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.05);
+    }
+  }
+}
+
+/* Integrated Editor Toolbar */
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--slate-50);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  flex-wrap: wrap;
+
+  .format-select {
+    padding: 0.4rem 0.75rem;
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    background: white;
+    color: var(--slate-700);
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  .toolbar-divider {
+    width: 1px;
+    height: 20px;
+    background: var(--slate-200);
+    margin: 0 0.5rem;
+  }
+
+  .toolbar-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    border-radius: var(--radius-md);
+    color: var(--slate-600);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+
+    &:hover {
+      background: white;
+      border-color: var(--slate-200);
+      color: var(--primary-600);
+      box-shadow: var(--shadow-sm);
+    }
+  }
+}
+
+/* Sleek File Upload Dropzone */
+.file-upload-area {
+  position: relative;
+
+  .file-input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+  .file-upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 2.5rem;
+    border: 2px dashed var(--slate-200);
+    border-radius: var(--radius-xl);
+    background: var(--slate-50);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--slate-500);
+
+    &:hover {
+      background: white;
+      border-color: var(--primary-400);
+      color: var(--primary-600);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.02);
+    }
+
+    .upload-icon {
+      width: 32px;
+      height: 32px;
+      color: var(--primary-500);
+      background: var(--primary-50);
+      padding: 8px;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    span {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+  }
+}
+
+.selected-files {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+
+  .file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: white;
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius-lg);
+
+    .file-name {
+      font-size: 0.875rem;
+      color: var(--slate-700);
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .remove-file-btn {
+      background: var(--slate-100);
+      color: var(--slate-500);
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: var(--danger);
+        color: white;
+      }
+    }
+  }
+}
+
+/* Clean Checkbox Alignment */
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 0;
+
+  input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    border: 2px solid var(--slate-200);
+    accent-color: var(--primary-600);
+    cursor: pointer;
+  }
+
+  label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--slate-600);
+    margin: 0;
+    cursor: pointer;
+
+    .terms-link {
+      color: var(--primary-600);
+      text-decoration: none;
+      border-bottom: 2px solid var(--primary-100);
+      transition: all 0.2s ease;
+
+      &:hover {
+        color: var(--primary-700);
+        border-color: var(--primary-300);
+      }
+    }
+  }
+}
+
+/* Form Actions & Success */
+.form-actions {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+}
+
+.submit-btn {
+  padding: 1.25rem 4rem;
+  background-color: var(--primary-600);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: 1.125rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
+
+  &:hover:not(:disabled) {
+    background-color: var(--primary-700);
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(79, 70, 229, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+.success-message {
+  padding: 60px;
+  text-align: center;
+  background: var(--success-bg);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  display: none;
+
+  &.show {
+    display: block;
+  }
+
+  .success-icon {
+    width: 80px;
+    height: 80px;
+    color: var(--success);
+    margin: 0 auto 2rem auto;
+  }
+
+  h3 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--slate-900);
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-size: 1.125rem;
+    color: var(--slate-600);
+  }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .hero h1 {
+    font-size: 3.5rem;
+  }
+
+  .steps {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .steps>div {
+    width: 100%;
+    max-width: 500px;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero .hero-actions {
+    flex-direction: column;
+  }
+
+  .container {
+    padding: 30px;
+  }
+
+  .form-header h2 {
+    font-size: 1.75rem;
+  }
+}

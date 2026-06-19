@@ -1,0 +1,15 @@
+<div class="profile-container" *ngIf="user">
+    <h2>Profile Details</h2>
+    <div class="profile-card">
+      <div class="profile-info">
+        <p><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Phone:</strong> {{ user.phone || 'N/A' }}</p>
+        <p><strong>City:</strong> {{ user.city || 'N/A' }}</p>
+        <p><strong>Address:</strong> {{ user.address || 'N/A' }}</p>
+        <p><strong>Country:</strong> {{ user.country || 'N/A' }}</p>
+        <p><strong>Role:</strong> {{ user.role }}</p>
+      </div>
+    </div>
+  </div>
+  

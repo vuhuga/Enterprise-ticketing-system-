@@ -1,0 +1,120 @@
+<div class="create-contact-container">
+    <div class="header">
+      <h1>Create a new contact</h1>
+      <nav class="breadcrumb">
+                <span class="breadcrumb-item">Home</span>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-item">Contacts</span>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-item active">Create a new contact</span>
+      </nav>
+    </div>
+  
+    <div class="form-container">
+      <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form" *ngIf="contactForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input id="firstName" formControlName="firstName" class="form-control" placeholder="Enter first name" />
+            <div class="error-message" *ngIf="isFieldInvalid('firstName')">{{ getFieldError('firstName') }}</div>
+          </div>
+  
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input id="lastName" formControlName="lastName" class="form-control" placeholder="Enter last name" />
+            <div class="error-message" *ngIf="isFieldInvalid('lastName')">{{ getFieldError('lastName') }}</div>
+          </div>
+  
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" formControlName="email" class="form-control" placeholder="Enter email" />
+            <div class="error-message" *ngIf="isFieldInvalid('email')">{{ getFieldError('email') }}</div>
+          </div>
+        </div>
+  
+        <div class="form-row">
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input id="phone" formControlName="phone" class="form-control" placeholder="Enter phone" />
+          </div>
+  
+          <div class="form-group">
+            <label for="jobTitle">Job Title</label>
+            <input id="jobTitle" formControlName="jobTitle" class="form-control" placeholder="Enter job title" />
+          </div>
+  
+          <div class="form-group">
+            <label for="department">Department *</label>
+            <select id="department" formControlName="department" class="form-control" required>
+              <option value="" disabled>Select a department</option>
+              <option *ngFor="let dept of departments" [value]="dept.name">
+                {{ dept.name }}
+              </option>
+            </select>
+            <div class="error-message" *ngIf="isFieldInvalid('department')">{{ getFieldError('department') }}</div>
+          </div>
+        </div>
+  
+        <div class="form-row">
+          <div class="form-group">
+            <label for="organizationId">Organization</label>
+            <select id="organizationId" formControlName="organizationId" class="form-control">
+              <option value="" disabled>Select an organization</option>
+              <option *ngFor="let org of organizations" [value]="org.id">
+                {{ org.name }}
+              </option>
+            </select>
+          </div>
+  
+          <div class="form-group">
+            <label for="city">City</label>
+            <input id="city" formControlName="city" class="form-control" placeholder="Enter city" />
+          </div>
+  
+          <div class="form-group">
+            <label for="country">Country</label>
+            <input id="country" formControlName="country" class="form-control" placeholder="Enter country" />
+          </div>
+        </div>
+  
+        <div class="form-row">
+          <div class="form-group">
+            <label for="address">Address</label>
+            <input id="address" formControlName="address" class="form-control" placeholder="Enter address" />
+          </div>
+  
+          <div class="form-group">
+            <label for="notes">Notes</label>
+            <input id="notes" formControlName="notes" class="form-control" placeholder="Enter notes" />
+          </div>
+  
+          <div class="form-group">
+            <label for="status">Status</label>
+            <select id="status" formControlName="status" class="form-control">
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
+        </div>
+  
+        <div class="form-row">
+          <div class="form-group">
+            <label for="preferredContactMethod">Preferred Contact Method</label>
+            <select id="preferredContactMethod" formControlName="preferredContactMethod" class="form-control">
+              <option value="Email">Email</option>
+              <option value="Phone">Phone</option>
+              <option value="SMS">SMS</option>
+            </select>
+          </div>
+        </div>
+  
+        <div class="form-actions">
+          <button type="submit" class="submit-btn" [disabled]="isSubmitting">
+            <span *ngIf="!isSubmitting">Create Contact</span>
+            <span *ngIf="isSubmitting" class="loading-text">Creating...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

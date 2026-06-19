@@ -1,0 +1,280 @@
+.contact-section {
+  padding: 4rem 0;
+  background: #f8fafc;
+  min-height: calc(100vh - 200px);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.contact-header {
+  text-align: center;
+  margin-bottom: 4rem;
+  
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    font-size: 1.125rem;
+    color: #64748b;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+.contact-content {
+  display: grid;
+  gap: 3rem;
+}
+
+.contact-methods {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.contact-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  }
+  
+  .contact-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background: #4f46e5;
+    color: white;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+  }
+  
+  p {
+    color: #64748b;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+  
+  .contact-link {
+    color: #4f46e5;
+    text-decoration: none;
+    font-weight: 500;
+    
+    &:hover {
+      color: #4338ca;
+      text-decoration: underline;
+    }
+  }
+  
+  .contact-address {
+    color: #64748b;
+    font-style: normal;
+    line-height: 1.6;
+  }
+}
+
+.ticket-cta {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  border-radius: 16px;
+  padding: 3rem;
+  text-align: center;
+  color: white;
+  
+  .cta-content {
+    max-width: 500px;
+    margin: 0 auto;
+    
+    h2 {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    
+    p {
+      font-size: 1.125rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+  }
+  
+  .cta-button {
+    background: white;
+    color: #4f46e5;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-size: 1.125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+  }
+}
+
+.business-hours {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  .hours-grid {
+    display: grid;
+    gap: 1rem;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .hours-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e2e8f0;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    
+    .day {
+      font-weight: 500;
+      color: #374151;
+    }
+    
+    .time {
+      color: #64748b;
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .contact-section {
+    padding: 2rem 0;
+  }
+  
+  .container {
+    padding: 0 1rem;
+  }
+  
+  .contact-header {
+    margin-bottom: 2rem;
+    
+    h1 {
+      font-size: 2rem;
+    }
+    
+    p {
+      font-size: 1rem;
+    }
+  }
+  
+  .contact-content {
+    gap: 2rem;
+  }
+  
+  .contact-methods {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .contact-card {
+    padding: 1.5rem;
+  }
+  
+  .ticket-cta {
+    padding: 2rem;
+    
+    .cta-content {
+      h2 {
+        font-size: 1.5rem;
+      }
+      
+      p {
+        font-size: 1rem;
+      }
+    }
+  }
+  
+  .business-hours {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-header {
+    h1 {
+      font-size: 1.75rem;
+    }
+  }
+  
+  .contact-card {
+    padding: 1rem;
+    
+    .contact-icon {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 1rem;
+      
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+  
+  .ticket-cta {
+    padding: 1.5rem;
+    
+    .cta-content {
+      h2 {
+        font-size: 1.25rem;
+      }
+    }
+    
+    .cta-button {
+      padding: 0.875rem 1.5rem;
+      font-size: 1rem;
+    }
+  }
+}

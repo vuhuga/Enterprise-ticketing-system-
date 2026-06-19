@@ -1,0 +1,19 @@
+.profile-container {
+    padding: 2rem;
+    max-width: 600px;
+    margin: auto;
+  }
+  
+  .profile-card {
+    display: flex;
+    gap: 1.5rem;
+    background: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+
+  
+  .profile-info p {
+    margin: 0.5rem 0;
+  }
+}

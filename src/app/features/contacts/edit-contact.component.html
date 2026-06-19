@@ -1,0 +1,115 @@
+<div class="edit-contact-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <h1>Edit Contact</h1>
+      <p>Update contact information</p>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Loading contact...</p>
+    </div>
+  }
+
+  <!-- Form -->
+  @if (!loading) {
+    <div class="form-container">
+      <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
+        <div class="form-grid">
+          <!-- Row 1: First Name, Last Name, Email -->
+          <div class="form-group">
+            <label for="firstName">First Name *</label>
+            <input type="text" id="firstName" formControlName="firstName" class="form-control" [class.is-invalid]="isFieldInvalid('firstName')" placeholder="First name" />
+            @if (isFieldInvalid('firstName')) {
+              <div class="invalid-feedback">{{ getFieldError('firstName') }}</div>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">Last Name *</label>
+            <input type="text" id="lastName" formControlName="lastName" class="form-control" [class.is-invalid]="isFieldInvalid('lastName')" placeholder="Last name" />
+            @if (isFieldInvalid('lastName')) {
+              <div class="invalid-feedback">{{ getFieldError('lastName') }}</div>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" formControlName="email" class="form-control" [class.is-invalid]="isFieldInvalid('email')" placeholder="Email" />
+            @if (isFieldInvalid('email')) {
+              <div class="invalid-feedback">{{ getFieldError('email') }}</div>
+            }
+          </div>
+
+          <!-- Row 2: Phone, Department, Position -->
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" formControlName="phone" class="form-control" [class.is-invalid]="isFieldInvalid('phone')" placeholder="Phone" />
+            @if (isFieldInvalid('phone')) {
+              <div class="invalid-feedback">{{ getFieldError('phone') }}</div>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="department">Department *</label>
+            <select id="department" formControlName="department" class="form-control" [class.is-invalid]="isFieldInvalid('department')">
+              <option value="">Select Department</option>
+              @for (dept of departments; track dept.id) {
+                <option [value]="dept.name">{{ dept.name }}</option>
+              }
+            </select>
+            @if (isFieldInvalid('department')) {
+              <div class="invalid-feedback">{{ getFieldError('department') }}</div>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="position">Position</label>
+            <input type="text" id="position" formControlName="position" class="form-control" [class.is-invalid]="isFieldInvalid('position')" placeholder="Position" />
+            @if (isFieldInvalid('position')) {
+              <div class="invalid-feedback">{{ getFieldError('position') }}</div>
+            }
+          </div>
+
+          <!-- Row 3: Company (span 2), Status -->
+          <div class="form-group span-2">
+            <label for="company">Company</label>
+            <input type="text" id="company" formControlName="company" class="form-control" [class.is-invalid]="isFieldInvalid('company')" placeholder="Company" />
+            @if (isFieldInvalid('company')) {
+              <div class="invalid-feedback">{{ getFieldError('company') }}</div>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="status">Status *</label>
+            <select id="status" formControlName="status" class="form-control" [class.is-invalid]="isFieldInvalid('status')">
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+            @if (isFieldInvalid('status')) {
+              <div class="invalid-feedback">{{ getFieldError('status') }}</div>
+            }
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-danger" (click)="onDelete()" [disabled]="isSubmitting">
+            Delete
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="isSubmitting || contactForm.invalid">
+            @if (isSubmitting) {
+              <span class="spinner-sm"></span>
+              Updating...
+            } @else {
+              Update
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+</div>

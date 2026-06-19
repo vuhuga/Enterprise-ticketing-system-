@@ -1,0 +1,236 @@
+<div class="create-user-container">
+  <div class="header">
+    <h1>Create a new user</h1>
+    <nav class="breadcrumb">
+      <span class="breadcrumb-item">Home</span>
+      <span class="breadcrumb-separator">/</span>
+      <span class="breadcrumb-item">Users</span>
+      <span class="breadcrumb-separator">/</span>
+      <span class="breadcrumb-item active">Create a new user</span>
+    </nav>
+  </div>
+
+  <div class="form-container">
+
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="user-form" *ngIf="userForm">
+      <!-- First Row: First name, Last name, Email -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName">First name</label>
+          <input
+            type="text"
+            id="firstName"
+            formControlName="firstName"
+            class="form-control"
+            [class.error]="isFieldInvalid('firstName')"
+            placeholder="Enter first name"
+          />
+          @if (isFieldInvalid('firstName')) {
+            <div class="error-message">
+              {{ getFieldError('firstName') }}
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="lastName">Last name</label>
+          <input
+            type="text"
+            id="lastName"
+            formControlName="lastName"
+            class="form-control"
+            [class.error]="isFieldInvalid('lastName')"
+            placeholder="Enter last name"
+          />
+          @if (isFieldInvalid('lastName')) {
+            <div class="error-message">
+              {{ getFieldError('lastName') }}
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            class="form-control"
+            [class.error]="isFieldInvalid('email')"
+            placeholder="Enter email address"
+          />
+          @if (isFieldInvalid('email')) {
+            <div class="error-message">
+              {{ getFieldError('email') }}
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Second Row: Phone, City -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="phone">Phone</label>
+          <input
+            type="tel"
+            id="phone"
+            formControlName="phone"
+            class="form-control"
+            placeholder="Enter phone number"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="city">City</label>
+          <input
+            type="text"
+            id="city"
+            formControlName="city"
+            class="form-control"
+            placeholder="Enter city"
+          />
+        </div>
+
+        <div class="form-group empty"></div>
+      </div>
+
+      <!-- Third Row: Address, Country, Password -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="address">Address</label>
+          <input
+            type="text"
+            id="address"
+            formControlName="address"
+            class="form-control"
+            placeholder="Enter address"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="country">Country</label>
+          <input
+            type="text"
+            id="country"
+            formControlName="country"
+            class="form-control"
+            placeholder="Enter country"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            formControlName="password"
+            class="form-control"
+            [class.error]="isFieldInvalid('password')"
+            placeholder="Enter password"
+          />
+          @if (isFieldInvalid('password')) {
+            <div class="error-message">
+              {{ getFieldError('password') }}
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Fourth Row: Role, Department, Photo -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="role">Role</label>
+          <select
+            id="role"
+            formControlName="role"
+            class="form-control"
+            [class.error]="isFieldInvalid('role')"
+          >
+            <option value="" disabled>Select role</option>
+            @for (role of userRoles; track role.value) {
+              <option [value]="role.value">
+                {{ role.label }}
+              </option>
+            }
+          </select>
+          @if (isFieldInvalid('role')) {
+            <div class="error-message">
+              {{ getFieldError('role') }}
+            </div>
+          }
+          <small class="help-text">
+            @if (userForm.get('role')?.value === 'admin') {
+              <span>Admin users are automatically assigned to Admin department</span>
+            }
+            @if (userForm.get('role')?.value === 'customer') {
+              <span>Customer accounts don't require a department</span>
+            }
+            @if (userForm.get('role')?.value === 'staff') {
+              <span>Staff users must be assigned to a department</span>
+            }
+          </small>
+        </div>
+
+        <div class="form-group" [class.empty]="!shouldShowDepartmentField()">
+          @if (shouldShowDepartmentField()) {
+            <label for="departmentId">Department *</label>
+            <select
+              id="departmentId"
+              formControlName="departmentId"
+              class="form-control"
+              [class.error]="isFieldInvalid('departmentId')"
+              [disabled]="loadingDepartments"
+            >
+              <option value="" disabled>Select department</option>
+              @for (dept of departments; track dept.id) {
+                <option [value]="dept.id">
+                  {{ dept.name }}
+                </option>
+              }
+            </select>
+            @if (isFieldInvalid('departmentId')) {
+              <div class="error-message">
+                {{ getFieldError('departmentId') }}
+              </div>
+            }
+            <small class="help-text">Required for staff members</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="photo">Photo</label>
+          <div class="photo-upload">
+            <input
+              type="file"
+              id="photo"
+              accept="image/*"
+              (change)="onPhotoSelected($event)"
+              class="file-input"
+            />
+            <button type="button" class="browse-btn" onclick="document.getElementById('photo')?.click()">
+              Browse
+            </button>
+            @if (selectedPhoto) {
+              <span class="file-name">{{ selectedPhoto.name }}</span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="form-actions">
+        <button
+          type="submit"
+          class="create-btn"
+          [disabled]="isSubmitting"
+        >
+          @if (isSubmitting) {
+            <span>Creating...</span>
+          } @else {
+            <span>Create User</span>
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

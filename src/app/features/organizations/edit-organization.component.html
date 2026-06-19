@@ -1,0 +1,109 @@
+<!--
+  Edit Organization Form Template
+  Provides interface for editing organization details with validation and safety features
+-->
+<div class="edit-organization-container">
+  <!-- Page header with title and description -->
+  <div class="page-header">
+    <div class="header-left">
+      <h1>Edit Organization</h1>
+      <p>Update organization information</p>
+    </div>
+  </div>
+
+  <!-- Loading spinner while fetching organization data -->
+  @if (loading) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Loading organization...</p>
+    </div>
+  }
+
+  <!-- Main form container - only shown when data is loaded -->
+  @if (!loading) {
+    <div class="form-container">
+      <!-- Reactive form for organization editing -->
+      <form [formGroup]="organizationForm" (ngSubmit)="onSubmit()" class="organization-form">
+        <!-- Form fields organized in responsive rows -->
+        <div class="form-row">
+          <!-- Organization name and status - critical fields -->
+          <div class="form-group span-2">
+            <!-- Required organization name field -->
+            <label for="name">Name *</label>
+            <input type="text" id="name" formControlName="name" class="form-control" [class.is-invalid]="isFieldInvalid('name')" placeholder="Organization name" />
+            @if (isFieldInvalid('name')) {
+              <div class="invalid-feedback">{{ getFieldError('name') }}</div>
+            }
+          </div>
+
+          <!-- Organization status dropdown -->
+          <div class="form-group">
+            <label for="status">Status *</label>
+            <select id="status" formControlName="status" class="form-control" [class.is-invalid]="isFieldInvalid('status')">
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+            @if (isFieldInvalid('status')) {
+              <div class="invalid-feedback">{{ getFieldError('status') }}</div>
+            }
+          </div>
+
+          <!-- Contact information fields -->
+          <div class="form-group">
+            <!-- Phone contact field -->
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" formControlName="phone" class="form-control" [class.is-invalid]="isFieldInvalid('phone')" placeholder="Phone" />
+            @if (isFieldInvalid('phone')) {
+              <div class="invalid-feedback">{{ getFieldError('phone') }}</div>
+            }
+          </div>
+
+          <div class="form-group">
+            <!-- Email contact field with validation -->
+            <label for="email">Email</label>
+            <input type="email" id="email" formControlName="email" class="form-control" [class.is-invalid]="isFieldInvalid('email')" placeholder="Email" />
+            @if (isFieldInvalid('email')) {
+              <div class="invalid-feedback">{{ getFieldError('email') }}</div>
+            }
+          </div>
+
+          <div class="form-group">
+            <!-- Website URL field -->
+            <label for="website">Website</label>
+            <input type="url" id="website" formControlName="website" class="form-control" [class.is-invalid]="isFieldInvalid('website')" placeholder="Website" />
+            @if (isFieldInvalid('website')) {
+              <div class="invalid-feedback">{{ getFieldError('website') }}</div>
+            }
+          </div>
+
+          <!-- Full-width address field -->
+          <div class="form-group span-3">
+            <!-- Organization address field -->
+            <label for="address">Address</label>
+            <input type="text" id="address" formControlName="address" class="form-control" [class.is-invalid]="isFieldInvalid('address')" placeholder="Address" />
+            @if (isFieldInvalid('address')) {
+              <div class="invalid-feedback">{{ getFieldError('address') }}</div>
+            }
+          </div>
+        </div>
+
+        <!-- Form action buttons -->
+        <div class="form-actions">
+          <!-- Delete organization button - destructive action -->
+          <button type="button" class="btn btn-danger" (click)="onDelete()" [disabled]="isSubmitting">
+            Delete
+          </button>
+          <!-- Update organization button - primary action -->
+          <button type="submit" class="btn btn-primary" [disabled]="isSubmitting || organizationForm.invalid">
+            @if (isSubmitting) {
+              <span class="spinner-sm"></span>
+              Updating...
+            } @else {
+              Update
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+</div>

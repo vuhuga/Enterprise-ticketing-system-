@@ -1,0 +1,124 @@
+<div class="department-list-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <h1>Department Management</h1>
+      <p>Manage and view all departments in the system</p>
+    </div>
+    <div class="header-right">
+      <button class="btn btn-primary" (click)="onCreateDepartment()">
+        <i class="icon-plus"></i>
+        Add Department
+      </button>
+    </div>
+  </div>
+
+  <!-- Search and Filters -->
+  <div class="filters-section">
+    <div class="search-box">
+      <input 
+        type="text" 
+        placeholder="Search departments..." 
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="onSearch()"
+        class="search-input">
+      <button class="search-btn" (click)="onSearch()">
+        <i class="icon-search"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading departments...</p>
+  </div>
+
+  <!-- Department Table -->
+  <div *ngIf="!loading" class="table-container">
+    <table class="departments-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Manager</th>
+          <th>Employees</th>
+          <th>Tickets</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let department of departments" class="department-row">
+          <td class="department-name">
+            <div class="name-cell">
+              <div class="dept-icon"></div>
+              <div class="name-info">
+                <span class="dept-name">{{ department.name }}</span>
+              </div>
+            </div>
+          </td>
+          <td class="description">{{ department.description || '-' }}</td>
+          <td class="manager">{{ department.managerName || 'Unassigned' }}</td>
+          <td class="employees">{{ department.employeeCount || 0 }}</td>
+          <td class="tickets">{{ department.ticketCount || 0 }}</td>
+          <td class="status">
+            <span class="status-badge" [ngClass]="getStatusClass(department.status)">
+              {{ department.status | titlecase }}
+            </span>
+          </td>
+          <td class="created">{{ department.createdAt | date:'MMM d, y' }}</td>
+          <td class="actions">
+            <div class="action-buttons">
+              <button class="btn-icon btn-edit" (click)="onEdit(department)" title="Edit">
+                <i class="icon-edit"></i>
+              </button>
+              <button class="btn-icon btn-delete" (click)="onDelete(department)" title="Delete">
+                <i class="icon-delete"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Empty State -->
+    <div *ngIf="departments.length === 0" class="empty-state">
+      <div class="empty-icon"></div>
+      <h3>No departments found</h3>
+      <p>{{ searchTerm ? 'No departments match your search criteria.' : 'Start by adding your first department.' }}</p>
+      <button class="btn btn-primary" (click)="onCreateDepartment()">Add Department</button>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div *ngIf="!loading && departments.length > 0" class="pagination-container">
+    <div class="pagination-info">
+      Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, totalCount) }} of {{ totalCount }} departments
+    </div>
+    <div class="pagination">
+      <button 
+        class="page-btn" 
+        [disabled]="currentPage === 1"
+        (click)="onPageChange(currentPage - 1)">
+        Previous
+      </button>
+      
+      <button 
+        *ngFor="let page of [].constructor(totalPages); let i = index"
+        class="page-btn"
+        [class.active]="currentPage === i + 1"
+        (click)="onPageChange(i + 1)">
+        {{ i + 1 }}
+      </button>
+      
+      <button 
+        class="page-btn" 
+        [disabled]="currentPage === totalPages"
+        (click)="onPageChange(currentPage + 1)">
+        Next
+      </button>
+    </div>
+  </div>
+</div>

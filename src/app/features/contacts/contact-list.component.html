@@ -1,0 +1,132 @@
+<div class="contact-list-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <h1>Contacts</h1>
+      <p>Manage and view all contacts in the system</p>
+    </div>
+    <div class="header-right">
+      <button class="btn btn-primary" (click)="onCreateContact()">
+        <lucide-icon [img]="Plus" [size]="16"></lucide-icon>
+        Add Contact
+      </button>
+    </div>
+  </div>
+
+  <!-- Search and Filters -->
+  <div class="filters-section">
+    <div class="search-box">
+      <input 
+        type="text" 
+        placeholder="Search contacts..." 
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="onSearch()"
+        class="search-input">
+      <button class="search-btn" (click)="onSearch()">
+        <lucide-icon [img]="Search" [size]="16"></lucide-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Loading contacts...</p>
+    </div>
+  }
+
+  <!-- Contact Table -->
+  @if (!loading) {
+    <div class="table-container">
+      <div class="table-wrapper">
+        <table class="contacts-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Job Title</th>
+              <th>Department</th>
+              <th>Status</th>
+              <th>Created</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (contact of contacts; track contact.id) {
+              <tr class="contact-row customer-row" (click)="onEdit(contact)">
+                <td class="contact-name">
+                  <div class="name-cell">
+                    <div class="avatar">{{ contact.firstName.charAt(0) }}{{ contact.lastName.charAt(0) }}</div>
+                    <div class="name-info">
+                      <span class="full-name">{{ contact.firstName }} {{ contact.lastName }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td class="email">{{ contact.email }}</td>
+                <td class="phone">{{ contact.phone || '-' }}</td>
+                <td class="job-title">{{ contact.jobTitle || '-' }}</td>
+                <td class="department">{{ contact.department || '-' }}</td>
+                <td class="status">
+                  <span class="status-badge" [ngClass]="getStatusClass(contact.status)">
+                    {{ contact.status }}
+                  </span>
+                </td>
+                <td class="created">{{ contact.createdAt | date:'MMM d, y' }}</td>
+                <td class="actions">
+                  <span class="arrow-icon">></span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty State -->
+      @if (contacts.length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">
+            <lucide-icon [img]="Phone" [size]="48"></lucide-icon>
+          </div>
+          <h3>No contacts found</h3>
+          <p>{{ searchTerm ? 'No contacts match your search criteria.' : 'Start by adding your first contact.' }}</p>
+          <button class="btn btn-primary" (click)="onCreateContact()">Add Contact</button>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Pagination -->
+  @if (!loading && contacts.length > 0) {
+    <div class="pagination-container">
+      <div class="pagination-info">
+        Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, totalCount) }} of {{ totalCount }} contacts
+      </div>
+      <div class="pagination">
+        <button 
+          class="page-btn" 
+          [disabled]="currentPage === 1"
+          (click)="onPageChange(currentPage - 1)">
+          Previous
+        </button>
+        
+        @for (page of [].constructor(totalPages); track $index; let i = $index) {
+          <button 
+            class="page-btn"
+            [class.active]="currentPage === i + 1"
+            (click)="onPageChange(i + 1)">
+            {{ i + 1 }}
+          </button>
+        }
+        
+        <button 
+          class="page-btn" 
+          [disabled]="currentPage === totalPages"
+          (click)="onPageChange(currentPage + 1)">
+          Next
+        </button>
+      </div>
+    </div>
+  }
+</div>

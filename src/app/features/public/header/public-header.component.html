@@ -1,0 +1,24 @@
+<header class="public-header">
+  <div class="container">
+    <div class="header-content">
+      <!-- Logo -->
+      <div class="logo">
+        <img src="logo.png" alt="Suntra Investment" class="logo-img">
+        <span class="logo-text">Suntra <span class="text-primary">Investments</span></span>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="nav">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+        <a routerLink="/contact" routerLinkActive="active">Contact</a>
+        <a routerLink="/faqs" routerLinkActive="active">FAQs</a>
+      </nav>
+
+      <!-- Auth Actions -->
+      <div class="auth-actions">
+        <a routerLink="/auth/login" class="login-btn">Login</a>
+        <a routerLink="/auth/register" class="register-btn">Register</a>
+      </div>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,143 @@
+<!-- Organization list container -->
+<div class="organization-list-container">
+  <!-- Page header with title and add button -->
+  <div class="page-header">
+    <div class="header-left">
+      <h1>Organizations</h1>
+      <p>Manage and view all organizations in the system</p>
+    </div>
+    <div class="header-right">
+      <button class="btn btn-primary" (click)="onCreateOrganization()">
+        <lucide-icon [img]="Plus" [size]="16"></lucide-icon>
+        Add Organization
+      </button>
+    </div>
+  </div>
+
+  <!-- Search and filter controls -->
+  <div class="filters-section">
+    <div class="search-box">
+      <input
+        type="text"
+        placeholder="Search organizations..."
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="onSearch()"
+        class="search-input">
+      <button class="search-btn" (click)="onSearch()">
+        <lucide-icon [img]="Search" [size]="16"></lucide-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading spinner during data fetch -->
+  @if (loading) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Loading organizations...</p>
+    </div>
+  }
+
+  <!-- Organization data table -->
+  @if (!loading) {
+    <div class="table-container">
+      <div class="table-wrapper">
+        <table class="organizations-table">
+          <!-- Table headers -->
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Address</th>
+              <th>Status</th>
+              <th>Created</th>
+              <th></th>
+            </tr>
+          </thead>
+          <!-- Table data rows -->
+          <tbody>
+            @for (organization of organizations; track organization.id) {
+              <tr class="organization-row customer-row" (click)="onEdit(organization)">
+                <!-- Organization name with avatar -->
+                <td class="organization-name">
+                  <div class="name-cell">
+                    <div class="avatar">{{ organization.name.charAt(0) }}</div>
+                    <div class="name-info">
+                      <span class="full-name">{{ organization.name }}</span>
+                      @if (organization.description) {
+                        <span class="description">{{ organization.description }}</span>
+                      }
+                    </div>
+                  </div>
+                </td>
+                <!-- Contact information -->
+                <td class="email">{{ organization.email || '-' }}</td>
+                <td class="phone">{{ organization.phone || '-' }}</td>
+                <td class="address">{{ organization.address || '-' }}</td>
+                <!-- Status badge -->
+                <td class="status">
+                  <span class="status-badge" [ngClass]="getStatusClass(organization.status)">
+                    {{ organization.status | titlecase }}
+                  </span>
+                </td>
+                <!-- Creation date -->
+                <td class="created">{{ organization.createdAt | date:'MMM d, y' }}</td>
+                <!-- Action indicator -->
+                <td class="actions">
+                  <span class="arrow-icon">></span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty state when no organizations found -->
+      @if (organizations.length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">
+            <lucide-icon [img]="Building" [size]="48"></lucide-icon>
+          </div>
+          <h3>No organizations found</h3>
+          <p>{{ searchTerm ? 'No organizations match your search criteria.' : 'Start by adding your first organization.' }}</p>
+          <button class="btn btn-primary" (click)="onCreateOrganization()">Add Organization</button>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Pagination controls -->
+  @if (!loading && organizations.length > 0) {
+    <div class="pagination-container">
+      <!-- Results count display -->
+      <div class="pagination-info">
+        Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, totalCount) }} of {{ totalCount }} organizations
+      </div>
+      <!-- Page navigation buttons -->
+      <div class="pagination">
+        <button
+          class="page-btn"
+          [disabled]="currentPage === 1"
+          (click)="onPageChange(currentPage - 1)">
+          Previous
+        </button>
+
+        @for (page of [].constructor(totalPages); track $index; let i = $index) {
+          <button
+            class="page-btn"
+            [class.active]="currentPage === i + 1"
+            (click)="onPageChange(i + 1)">
+            {{ i + 1 }}
+          </button>
+        }
+
+        <button
+          class="page-btn"
+          [disabled]="currentPage === totalPages"
+          (click)="onPageChange(currentPage + 1)">
+          Next
+        </button>
+      </div>
+    </div>
+  }
+</div>

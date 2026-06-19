@@ -1,0 +1,140 @@
+.footer {
+  background: linear-gradient(135deg, #2c3e50, #34495e);
+  color: white;
+  padding: 50px 0 20px 0;
+  margin-top: 80px;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 40px;
+}
+
+.footer-section {
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: white;
+  }
+}
+
+.footer-logo {
+  .logo {
+    height: 50px;
+    margin-bottom: 20px;
+  }
+}
+
+.footer-description {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #bdc3c7;
+  margin: 0;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    margin-bottom: 12px;
+  }
+
+  a {
+    color: #bdc3c7;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: white;
+    }
+  }
+}
+
+.newsletter-text {
+  font-size: 14px;
+  color: #bdc3c7;
+  margin-bottom: 20px;
+}
+
+.newsletter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.newsletter-input {
+  padding: 12px;
+  border: 1px solid #34495e;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 14px;
+
+  &::placeholder {
+    color: #bdc3c7;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #3b5bdb;
+    background: rgba(255, 255, 255, 0.15);
+  }
+}
+
+.newsletter-btn {
+  padding: 12px 20px;
+  background: #3b5bdb;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: #2f4fbb;
+  }
+}
+
+.footer-bottom {
+  border-top: 1px solid #34495e;
+  margin-top: 40px;
+  padding-top: 20px;
+  text-align: center;
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    color: #bdc3c7;
+  }
+}
+
+.footer-link {
+  color: #3b5bdb;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    text-align: center;
+  }
+  
+  .footer {
+    padding: 40px 0 20px 0;
+  }
+}

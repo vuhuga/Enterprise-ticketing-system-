@@ -1,0 +1,44 @@
+<div class="create-note-container">
+    <div class="header">
+      <h1>Create Note</h1>
+      <button class="close-btn" (click)="goBack()" title="Close">×</button>
+    </div>
+  
+    <div class="form-container">
+      <form [formGroup]="noteForm" (ngSubmit)="onSubmit()" class="note-form" *ngIf="noteForm">
+        <div class="form-grid">
+          <!-- Row 1: Title, Category -->
+          <div class="form-group span-2">
+            <label for="title">Title *</label>
+            <input id="title" formControlName="title" class="form-control" placeholder="Note title" />
+            <div class="error-message" *ngIf="isFieldInvalid('title')">{{ getFieldError('title') }}</div>
+          </div>
+  
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" formControlName="category" class="form-control">
+              <option value="general">General</option>
+              <option value="meeting">Meeting</option>
+              <option value="task">Task</option>
+              <option value="reminder">Reminder</option>
+              <option value="important">Important</option>
+            </select>
+          </div>
+  
+          <!-- Row 2: Content (horizontal/landscape textarea) -->
+          <div class="form-group span-3">
+            <label for="content">Content *</label>
+            <textarea id="content" formControlName="content" class="form-control" placeholder="Note content"></textarea>
+            <div class="error-message" *ngIf="isFieldInvalid('content')">{{ getFieldError('content') }}</div>
+          </div>
+        </div>
+  
+        <div class="form-actions">
+          <button type="submit" class="submit-btn" [disabled]="isSubmitting">
+            <span *ngIf="!isSubmitting">Create</span>
+            <span *ngIf="isSubmitting">Creating...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>

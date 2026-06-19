@@ -1,0 +1,120 @@
+<div class="customer-list-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <h1>Customers</h1>
+      <p>Manage and view all customers in the system</p>
+    </div>
+    <div class="header-right">
+      <button class="btn btn-primary" (click)="onCreateCustomer()">
+        <i class="icon-plus"></i>
+        Add Customer
+      </button>
+    </div>
+  </div>
+
+  <!-- Search and Filters -->
+  <div class="filters-section">
+    <div class="search-box">
+      <input 
+        type="text" 
+        placeholder="Search customers..." 
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="onSearch()"
+        class="search-input">
+      <button class="search-btn" (click)="onSearch()">
+        <i class="icon-search"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Loading customers...</p>
+    </div>
+  }
+
+  <!-- Customer Table -->
+  @if (!loading) {
+    <div class="table-container">
+      <div class="table-wrapper">
+        <table class="customers-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>City</th>
+              <th>Created</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (customer of customers; track customer.id) {
+              <tr class="customer-row" (click)="onEdit(customer)">
+                <td class="customer-name">
+                  <div class="name-cell">
+                    <div class="avatar">{{ customer.firstName.charAt(0) }}{{ customer.lastName.charAt(0) }}</div>
+                    <div class="name-info">
+                      <span class="full-name">{{ customer.firstName }} {{ customer.lastName }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td class="phone">{{ customer.phone || '-' }}</td>
+                <td class="city">{{ customer.city || '-' }}</td>
+                <td class="created">{{ customer.createdAt | date:'MMM d, y' }}</td>
+                <td class="actions">
+                  <span class="arrow-icon">></span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty State -->
+      @if (customers.length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon"></div>
+          <h3>No customers found</h3>
+          <p>{{ searchTerm ? 'No customers match your search criteria.' : 'Start by adding your first customer.' }}</p>
+          <button class="btn btn-primary" (click)="onCreateCustomer()">Add Customer</button>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Pagination -->
+  @if (!loading && customers.length > 0) {
+    <div class="pagination-container">
+      <div class="pagination-info">
+        Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, totalCount) }} of {{ totalCount }} customers
+      </div>
+      <div class="pagination">
+        <button 
+          class="page-btn" 
+          [disabled]="currentPage === 1"
+          (click)="onPageChange(currentPage - 1)">
+          Previous
+        </button>
+        
+        @for (page of [].constructor(totalPages); track $index; let i = $index) {
+          <button 
+            class="page-btn"
+            [class.active]="currentPage === i + 1"
+            (click)="onPageChange(i + 1)">
+            {{ i + 1 }}
+          </button>
+        }
+        
+        <button 
+          class="page-btn" 
+          [disabled]="currentPage === totalPages"
+          (click)="onPageChange(currentPage + 1)">
+          Next
+        </button>
+      </div>
+    </div>
+  }
+</div>
